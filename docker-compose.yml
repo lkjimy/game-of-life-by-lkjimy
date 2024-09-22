@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  frontend:
+    image: node:20-alpine
+    container_name: game-of-life
+    ports:
+      - "8585:8585"
+    volumes:
+      - ./:/home/app:cached
+    working_dir: /home/app
+    tty: true
+    command: npx --yes serve /home/app --listen 8585
