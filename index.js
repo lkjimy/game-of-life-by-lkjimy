@@ -162,25 +162,21 @@ function paint(event) {
   render()
 }
 
-canvas.addEventListener('mousedown', paintBetter)
+function removeListeners() {
+  canvas.removeEventListener('mousemove', paint)
+  canvas.removeEventListener('mouseup', removeListeners)
+}
 
-canvas.addEventListener('mouseup', () => {
-  canvas.removeEventListener('mousedown', paintBetter)
-})
-
-function paintBetter(event) {
-  console.log(event)
-
-  canvas.addEventListener('mousemove', (ev) => {
-    console.log(ev)
-  })
+function mouseDown(event) {
+  paint(event)
+  canvas.addEventListener('mousemove', paint)
+  canvas.addEventListener('mouseup', removeListeners)
 }
 
 function toggleTimer() {
   if (isPaused) {
     isPaused = !isPaused
-    canvas.removeEventListener('click', paint)
-    // canvas.removeEventListener('mousedown', paintBetter)
+    canvas.removeEventListener('mousedown', mouseDown)
 
     timer = setInterval(() => {
       const start = performance.now()
@@ -192,8 +188,7 @@ function toggleTimer() {
   } else {
     isPaused = !isPaused
     clearInterval(timer)
-    canvas.addEventListener('click', paint)
-    // canvas.addEventListener('drag', paintBetter)
+    canvas.addEventListener('mousedown', mouseDown)
   }
 }
 
